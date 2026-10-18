@@ -89,15 +89,17 @@ def render(now):
     slogan = "TOBBE HEALER!" if now < TARGET else "THE WAIT IS OVER!"
     text(slogan, 411, 21, "#D4AF67")
 
+    
     updated = now.strftime("%Y-%m-%d %H:%M")
-text(
-    f"UPPDATERAS CIRKA VARJE MINUT · SENAST UPPDATERAD {updated}",
-    448, 11, "#8ECADD",
-)
+    text(
+        f"UPPDATERAS CIRKA VARJE MINUT · SENAST UPPDATERAD {updated}",
+        448, 11, "#8ECADD",
+    )
 
     output = io.BytesIO()
     canvas.save(output, format="PNG")
     return output.getvalue()
+
 
 
 def publish(image, create):

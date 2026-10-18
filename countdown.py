@@ -58,7 +58,7 @@ def render(now):
         )
 
     text(
-        "NOVEMBER 4, 2026 · 6:00 PM EST",
+        "5 NOVEMBER 2026 · 00:00 CET",
         230, 19, "#D4AF67",
     )
 

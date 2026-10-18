@@ -101,7 +101,7 @@ def render(now):
 
     updated = now.strftime("%Y-%m-%d %H:%M")
     text(
-        f"UPPDATERAS CIRKA VARJE MINUT · SENAST UPPDATERAD {updated}",
+        f"UPPDATERAS MELLAN 5-30 MIN · SENAST UPPDATERAD {updated}",
         448, 11, "#8ECADD",
     )
 

@@ -4,13 +4,15 @@ import json
 import os
 import time
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent
-TARGET = datetime.fromisoformat("2026-11-04T18:00:00-05:00")
+STOCKHOLM = ZoneInfo("Europe/Stockholm")
+TARGET = datetime(2026, 11, 5, 0, 0, tzinfo=STOCKHOLM)
 
 
 def font(size):
@@ -84,12 +86,12 @@ def render(now):
         text(f"{value:02d}", 290, 48, "#F3E6C8", left + 97)
         text(label, 353, 16, "#8ECADD", left + 97)
 
-    slogan = "FOR AZEROTH!" if now < TARGET else "THE WAIT IS OVER!"
+    slogan = "TOBBE HEALER!" if now < TARGET else "THE WAIT IS OVER!"
     text(slogan, 411, 21, "#D4AF67")
 
     updated = now.strftime("%H:%M UTC")
     text(
-        f"REFRESHES ABOUT EVERY MINUTE · UPDATED {updated}",
+        f"UPPDATERAS CIRKA VARJE MINUT · SENAST UPPDATERAD {updated}",
         448, 11, "#8ECADD",
     )
 
@@ -163,9 +165,9 @@ if __name__ == "__main__":
     parser.add_argument("--create", action="store_true")
     args = parser.parse_args()
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(STOCKHOLM)
 
-    if now > datetime.fromisoformat("2026-11-05T18:00:00-05:00"):
-        print("Countdown complete.")
+    if now >= TARGET:
+        print("VI ÄR LIVE!.")
     else:
         publish(render(now), args.create)

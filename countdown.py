@@ -21,8 +21,15 @@ def font(size):
     return result
 
 
+
 def render(now):
-    canvas = Image.new("RGB", (1000, 480), "#0F172A")
+    SCALE = 1.6
+    W, H = 1600, 768
+
+    def s(value):
+        return int(value * SCALE)
+
+    canvas = Image.new("RGB", (W, H), "#0F172A")
 
     background = Image.open(ROOT / "azeroth.png").convert("RGB")
     background = background.resize(
@@ -31,31 +38,31 @@ def render(now):
 
     mask = Image.new("L", canvas.size)
     mask.putdata([
-        int(90 * (1 - x / 999) ** 1.3)
-        for y in range(480)
-        for x in range(1000)
+        int(90 * (1 - x / (W - 1)) ** 1.3)
+        for y in range(H)
+        for x in range(W)
     ])
     canvas.paste(background, (0, 0), mask)
 
     logo = Image.open(ROOT / "logo.png").convert("RGBA")
-    logo.thumbnail((260, 214), Image.Resampling.LANCZOS)
-    canvas.paste(logo, ((1000 - logo.width) // 2, 14), logo)
+    logo.thumbnail((s(260), s(214)), Image.Resampling.LANCZOS)
+    canvas.paste(logo, ((W - logo.width) // 2, s(14)), logo)
 
     draw = ImageDraw.Draw(canvas)
 
     draw.rounded_rectangle(
-        (8, 8, 991, 471),
-        radius=16,
+        (s(8), s(8), W - s(9), H - s(9)),
+        radius=s(16),
         outline="#8B693D",
-        width=2,
+        width=s(2),
     )
 
     def text(value, y, size, color, x=500):
         draw.text(
-            (x, y),
+            (s(x), s(y)),
             value,
             anchor="mt",
-            font=font(size),
+            font=font(s(size)),
             fill=color,
         )
 
@@ -76,11 +83,14 @@ def render(now):
         left = 185 + index * 218
 
         draw.rounded_rectangle(
-            (left, 274, left + 194, 391),
-            radius=12,
+            (
+                s(left), s(274),
+                s(left + 194), s(391),
+            ),
+            radius=s(12),
             fill="#182839",
             outline="#8B693D",
-            width=2,
+            width=s(2),
         )
 
         text(f"{value:02d}", 290, 48, "#F3E6C8", left + 97)
@@ -89,7 +99,6 @@ def render(now):
     slogan = "TOBBE HEALER!" if now < TARGET else "THE WAIT IS OVER!"
     text(slogan, 411, 21, "#D4AF67")
 
-    
     updated = now.strftime("%Y-%m-%d %H:%M")
     text(
         f"UPPDATERAS CIRKA VARJE MINUT · SENAST UPPDATERAD {updated}",
